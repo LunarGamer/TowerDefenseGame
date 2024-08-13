@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://de6fq026rdcy1"]
+
+[ext_resource type="Script" path="res://Mobs/EnemyBase.gd" id="1_kvr18"]
+[ext_resource type="Script" path="res://addons/2d_shapes/shapes/Ellipse.gd" id="1_nxqle"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3n6uc"]
+
+[node name="Enemy Base" type="CharacterBody2D"]
+script = ExtResource("1_kvr18")
+
+[node name="Ellipse" type="Node2D" parent="."]
+position = Vector2(224, 96)
+script = ExtResource("1_nxqle")
+size = Vector2(32, 32)
+circle = true
+style = 2
+outline_width = 2
+fill_color = Color(0, 0, 0, 1)
+outline_color = Color(0.968627, 0.572549, 0.176471, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(224, 96)
+scale = Vector2(1.705, 1.705)
+shape = SubResource("CircleShape2D_3n6uc")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]

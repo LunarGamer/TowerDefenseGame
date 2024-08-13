@@ -1,0 +1,100 @@
+[gd_scene load_steps=7 format=3 uid="uid://bn8t4jt30peu7"]
+
+[ext_resource type="PackedScene" uid="uid://c8xvt3sgtu08m" path="res://TheCastleWall.tscn" id="1_5jcny"]
+[ext_resource type="Script" path="res://TheBattlefield.gd" id="1_6yyc6"]
+[ext_resource type="PackedScene" uid="uid://ckvlqhrixxpx5" path="res://Path.tscn" id="2_onj3l"]
+[ext_resource type="PackedScene" uid="uid://bbh1x2qc3et8y" path="res://Terrain.tscn" id="3_xr8iy"]
+[ext_resource type="PackedScene" uid="uid://de6fq026rdcy1" path="res://Mobs/EnemyBase.tscn" id="4_mjabe"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_b70xg"]
+vertices = PackedVector2Array(1534, 374, 138, 374, 138, 74, 1534, 74)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(1544, 64, 1544, 384, 227, 384, 128, 384, 128, 64, 227, 64)])
+source_geometry_group_name = &"navigation_polygon_source_group"
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_6yyc6")
+metadata/MobPath = NodePath("")
+
+[node name="Wall" parent="." instance=ExtResource("1_5jcny")]
+position = Vector2(-616, -752)
+scale = Vector2(1.5, 1.5)
+
+[node name="Path" parent="." instance=ExtResource("2_onj3l")]
+position = Vector2(16, -176)
+
+[node name="Polygon2D" parent="Path" index="0"]
+z_index = -2
+position = Vector2(-136, -464)
+polygon = PackedVector2Array(120, 64, 120, 384, 1504, 384, 1504, 64)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="Path/Polygon2D" index="0"]
+navigation_polygon = SubResource("NavigationPolygon_b70xg")
+
+[node name="BottomGrass" parent="." instance=ExtResource("3_xr8iy")]
+position = Vector2(16, -176)
+
+[node name="Polygon2D" parent="BottomGrass" index="0"]
+z_index = -1
+position = Vector2(-104, -144)
+polygon = PackedVector2Array(88, 64, 88, 320, 1472, 320, 1472, 64)
+
+[node name="CollisionPolygon2D" parent="BottomGrass/Polygon2D/Area2D" index="0"]
+visible = false
+polygon = PackedVector2Array(-125.692, 31.0946, -125.692, 287.095, 1258.31, 287.095, 1258.31, 31.0946)
+
+[node name="TopGrass" parent="." instance=ExtResource("3_xr8iy")]
+position = Vector2(-88, -896)
+
+[node name="Polygon2D" parent="TopGrass" index="0"]
+z_index = -1
+polygon = PackedVector2Array(88, 64, 88, 320, 1472, 320, 1472, 64)
+
+[node name="CollisionPolygon2D" parent="TopGrass/Polygon2D/Area2D" index="0"]
+visible = false
+polygon = PackedVector2Array(-125.692, 31.0946, -125.692, 287.095, 1258.31, 287.095, 1258.31, 31.0946)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -832)
+anchor_mode = 0
+zoom = Vector2(1.39, 1.3)
+
+[node name="Ready" type="Button" parent="."]
+offset_left = 604.0
+offset_top = -824.0
+offset_right = 804.0
+offset_bottom = -768.0
+toggle_mode = true
+action_mode = 0
+text = "Ready?"
+
+[node name="MobTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 1.5
+
+[node name="MobSpawnPoint1" type="Marker2D" parent="."]
+position = Vector2(1400, -544)
+
+[node name="MobSpawnPoint2" type="Marker2D" parent="."]
+position = Vector2(1400, -480)
+
+[node name="MobSpawnPoint3" type="Marker2D" parent="."]
+position = Vector2(1400, -416)
+
+[node name="MobSpawnPoint4" type="Marker2D" parent="."]
+position = Vector2(1400, -352)
+
+[node name="MobSpawnPoint5" type="Marker2D" parent="."]
+position = Vector2(1400, -288)
+
+[node name="EnemyBase" parent="." node_paths=PackedStringArray("target_to_chase") instance=ExtResource("4_mjabe")]
+position = Vector2(1176, -640)
+target_to_chase = NodePath("../Wall/CharacterBody2D")
+
+[connection signal="pressed" from="Ready" to="." method="_on_ready_pressed"]
+[connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
+
+[editable path="Wall"]
+[editable path="Path"]
+[editable path="BottomGrass"]
+[editable path="TopGrass"]
